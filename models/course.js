@@ -26,5 +26,9 @@ module.exports = (sequelize) => {
     materialsNeeded: Sequelize.STRING
   }, { sequelize });
 
+  Course.associate = (models) => {
+    Course.belongsTo(models.User, { foreignKey: "UserId" });
+  };
+
   return Course;
 }
