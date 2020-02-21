@@ -17,7 +17,7 @@ function asyncHandler(cb) {
 
 // returns a list of all courses
 router.get("/", asyncHandler(async (req, res) => {
-
+  console.log("working");
 }));
 
 // returns a specific course based on the provided course id
@@ -39,3 +39,5 @@ router.put("/", asyncHandler(async (req, res) => {
 router.delete("/", asyncHandler(async (req, res) => {
 
 }));
+
+module.exports = router;

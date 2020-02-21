@@ -17,10 +17,12 @@ function asyncHandler(cb) {
 
 // returns the currently authenticated user
 router.get("/", asyncHandler(async (req, res) => {
-
+  console.log("working");
 }));
 
 // creates a new user
 router.post("/", asyncHandler(async (req, res) => {
 
 }));
+
+module.exports = router;
