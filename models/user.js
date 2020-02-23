@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
           msg: "Last Name is required"
         },
         notNull: {
-          msg: "Request must contain a First Name"
+          msg: "Request must contain a Last Name"
         }
       }
     },
@@ -38,7 +38,7 @@ module.exports = (sequelize) => {
           msg: "Email Address is required"
         },
         notNull: {
-          msg: "Request must contain a First Name"
+          msg: "Request must contain an Email Address"
         }
       }
     },
@@ -50,7 +50,7 @@ module.exports = (sequelize) => {
           msg: "Password is required"
         },
         notNull: {
-          msg: "Request must contain a First Name"
+          msg: "Request must contain a Password"
         }
       }
     }
