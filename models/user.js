@@ -8,33 +8,49 @@ module.exports = (sequelize) => {
   User.init({
     firstName: {
       type: Sequelize.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: "First Name is required"
+        },
+        notNull: {
+          msg: "Request must contain a First Name"
         }
       }
     },
     lastName: {
       type: Sequelize.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: "Last Name is required"
+        },
+        notNull: {
+          msg: "Request must contain a First Name"
         }
       }
     },
     emailAddress: {
       type: Sequelize.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: "Email Address is required"
+        },
+        notNull: {
+          msg: "Request must contain a First Name"
         }
       }
     },
     password: {
       type: Sequelize.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: "Password is required"
+        },
+        notNull: {
+          msg: "Request must contain a First Name"
         }
       }
     }
