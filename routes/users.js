@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const bcryptjs = require("bcryptjs");
 const User = require("../models").User;
-const Course = require("../models").Course;
-const Sequelize = require('sequelize');
+// const Sequelize = require('sequelize');
 
 // handler function to wrap each route
 function asyncHandler(cb) {
@@ -24,9 +24,14 @@ router.get("/", asyncHandler(async (req, res) => {
 
 // creates a new user
 router.post("/", asyncHandler(async (req, res) => {
-  let user
+  let user = req.body;
+
+  if (user.password) {
+    user.password = bcryptjs.hashSync(user.password);
+  }
+
   try {
-    user = await User.create(req.body);
+    user = await User.create(user);
 
     res.status(201).location("/").end();
   } catch (error) {
