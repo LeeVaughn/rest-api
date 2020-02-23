@@ -16,12 +16,8 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-// Setup request body JSON parsing.
+// setup request body JSON parsing.
 app.use(express.json());
-
-// // Add routes.
-// app.use('/api/users', usersRoutes);
-// app.use('/api/courses', coursesRoutes);
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
@@ -30,7 +26,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Add routes.
+// add routes
 app.use('/api/users', usersRoutes);
 app.use('/api/courses', coursesRoutes);
 
