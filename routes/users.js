@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const authenticateUser = require("../middleware/authenticateUser");
 const bcryptjs = require("bcryptjs");
 const User = require("../models").User;
 // const Sequelize = require('sequelize');
@@ -17,9 +18,10 @@ function asyncHandler(cb) {
 }
 
 // returns the currently authenticated user
-router.get("/", asyncHandler(async (req, res) => {
-  const users = await User.findAll();
-  res.json(users);
+router.get("/", authenticateUser, asyncHandler(async (req, res) => {
+  const user = req.currentUser;
+  // const currentUser = await User.find(user);
+  res.json(user);
 }));
 
 // creates a new user
