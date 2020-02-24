@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Course = require("../models").Course;
 const User = require("../models").User;
+const authenticateUser = require("../middleware/authenticateUser");
 // const Sequelize = require('sequelize');
 
 // handler function to wrap each route
@@ -40,8 +41,26 @@ router.get("/:id", asyncHandler(async (req, res) => {
 }));
 
 // creates a new course
-router.post("/", asyncHandler(async (req, res) => {
+router.post("/", authenticateUser, asyncHandler(async (req, res) => {
+  const user = req.currentUser;
+  let course = req.body;
+  console.log(course)
 
+  try {
+    course = await Course.create(course);
+
+    res.status(201).location(`/courses/${course.id}`).end();
+  } catch (error) {
+    if (error.name === "SequelizeValidationError") {
+      // iterates over error to create an array of error messages
+      const errors = error.errors.map(err => err.message);
+
+      res.status(400).json(errors);
+    } else {
+      // handled by asyncHandler's catch block
+      throw error;
+    }
+  }
 }));
 
 // updates a specific course based on the provided course id
