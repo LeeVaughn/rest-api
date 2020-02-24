@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
           msg: "Title is required"
         },
         notNull: {
-          msg: "Request must contain a First Name"
+          msg: "Request must contain a Title"
         }
       }
     },
@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
           msg: "Description is required"
         },
         notNull: {
-          msg: "Request must contain a First Name"
+          msg: "Request must contain a Description"
         }
       }
     },
