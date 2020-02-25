@@ -42,9 +42,7 @@ router.get("/:id", asyncHandler(async (req, res) => {
 
 // creates a new course
 router.post("/", authenticateUser, asyncHandler(async (req, res) => {
-  const user = req.currentUser;
   let course = req.body;
-  console.log(course)
 
   try {
     course = await Course.create(course);
@@ -64,12 +62,38 @@ router.post("/", authenticateUser, asyncHandler(async (req, res) => {
 }));
 
 // updates a specific course based on the provided course id
-router.put("/", asyncHandler(async (req, res) => {
+router.put("/:id", authenticateUser, asyncHandler(async (req, res) => {
+  const user = req.currentUser;
+  let course;
 
+  try {
+    course = await Course.findByPk(req.body.id);
+
+    // if course was successfully retrieved and current user and course user are the same...
+    if (course && course.userId == user.id) {
+      await course.update(req.body);
+
+      res.status(204).end();
+    } else if (course.userId != user.id) {
+      res.status(403).json({ "message": "You do not own the requested course" })
+    } else {
+      res.status(404).json({ "message": "Course not found" });
+    }
+  } catch (error) {
+    if (error.name === "SequelizeValidationError") {
+      // iterates over error to create an array of error messages
+      const errors = error.errors.map(err => err.message);
+
+      res.status(400).json(errors);
+    } else {
+      // handled by asyncHandler's catch block
+      throw error;
+    }
+  }
 }));
 
 // deletes a specific course based on the provided course id
-router.delete("/", asyncHandler(async (req, res) => {
+router.delete("/:id", asyncHandler(async (req, res) => {
 
 }));
 
