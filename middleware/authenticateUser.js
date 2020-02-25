@@ -11,6 +11,7 @@ const authenticateUser = async (req, res, next) => {
   if (credentials) {
     // attempt to retrieve the user from data store using the user's key from the Authorization header
     const user = await User.findOne({ where: { emailAddress: credentials.name } });
+    // const user = await User.findOne({ where: { emailAddress: credentials.name }, attributes: ['id', 'firstName', 'lastName',"emailAddress"] });
 
     // if a user was successfully retrieved from the data store...
     if (user) {
@@ -19,12 +20,12 @@ const authenticateUser = async (req, res, next) => {
 
       // If the passwords match...
       if (authenticated) {
-        console.log(`Authentication successful for username: ${user.username}`);
+        console.log(`Authentication successful for username: ${user.emailAddress}`);
 
         // store the retrieved user object on the request object so middleware that follows will have access to this info
         req.currentUser = user;
       } else {
-        message = `Authentication failure for username: ${user.username}`;
+        message = `Authentication failure for username: ${user.emailAddress}`;
       }
     } else {
       message = `User not found for username: ${credentials.name}`;
@@ -37,7 +38,7 @@ const authenticateUser = async (req, res, next) => {
   if (message) {
     console.warn(message);
 
-    res.status(401).json({ message: "Access Denied" });
+    res.status(401).json({ message: "Access Denied" }).end;
   }
 
   // if user authentication has succeeded...
