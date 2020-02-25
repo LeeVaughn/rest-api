@@ -20,8 +20,13 @@ function asyncHandler(cb) {
 // returns the currently authenticated user
 router.get("/", authenticateUser, asyncHandler(async (req, res) => {
   const user = req.currentUser;
-  // const currentUser = await User.find(user);
-  res.json(user);
+
+  res.json({
+    "id": `${user.id}`,
+    "firstName": `${user.firstName}`,
+    "lastName": `${user.lastName}`,
+    "emailAddress": `${user.emailAddress}`
+  });
 }));
 
 // creates a new user
