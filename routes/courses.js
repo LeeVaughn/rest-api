@@ -66,35 +66,53 @@ router.put("/:id", authenticateUser, asyncHandler(async (req, res) => {
   const user = req.currentUser;
   let course;
 
-  try {
-    course = await Course.findByPk(req.body.id);
-
-    // if course was successfully retrieved and current user and course user are the same...
-    if (course && course.userId == user.id) {
-      await course.update(req.body);
-
-      res.status(204).end();
-    } else if (course.userId != user.id) {
-      res.status(403).json({ "message": "You do not own the requested course" })
-    } else {
-      res.status(404).json({ "message": "Course not found" });
-    }
-  } catch (error) {
-    if (error.name === "SequelizeValidationError") {
-      // iterates over error to create an array of error messages
-      const errors = error.errors.map(err => err.message);
-
-      res.status(400).json(errors);
-    } else {
+  // if required properties are present in request body...
+  if (req.body.title && req.body.description) {
+    try {
+      course = await Course.findByPk(req.body.id);
+  
+      // if course was successfully retrieved and current user and course user are the same...
+      // else if course owner is not the same as the current user...
+      // else the course was found...
+      if (course && course.userId == user.id) {
+        await course.update(req.body);
+  
+        res.status(204).end();
+      } else if (course.userId != user.id) {
+        res.status(403).json({ "message": "You do not own the requested course" });
+      } else {
+        res.status(404).json({ "message": "Course not found" });
+      }
+    } catch (error) {
       // handled by asyncHandler's catch block
       throw error;
     }
+  } else {
+    res.status(400).json({ "message": "Title and Description required" });
   }
 }));
 
 // deletes a specific course based on the provided course id
-router.delete("/:id", asyncHandler(async (req, res) => {
+router.delete("/:id", authenticateUser, asyncHandler(async (req, res) => {
+  const user = req.currentUser;
+  let course;
 
+  try {
+    course = await Course.findByPk(req.params.id);
+
+    // if course was successfully retrieved and current user and course user are the same...
+    // else if course owner is not the same as the current user...
+    if (course && course.userId == user.id) {
+      await course.destroy();
+
+      res.status(204).end();
+    } else if (course.userId != user.id) {
+      res.status(403).json({ "message": "You do not own the requested course" });
+    }
+  } catch (error) {
+    // handled by asyncHandler's catch block
+    throw error;
+  }
 }));
 
 module.exports = router;
