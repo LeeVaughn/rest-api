@@ -39,6 +39,9 @@ module.exports = (sequelize) => {
         },
         notNull: {
           msg: "Request must contain an Email Address"
+        },
+        isEmail: {
+          msg: "Please provide a valid Email Address"
         }
       }
     },
